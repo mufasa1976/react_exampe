@@ -2,6 +2,7 @@ import { Backdrop } from "@material-ui/core";
 import React, { Suspense } from "react";
 import { Link, Route, Switch } from "react-router-dom";
 import "./App.css";
+import DeadLink from "./DeadLink";
 import Detail from "./Detail";
 import logo from "./logo.svg";
 import Site from "./Site";
@@ -26,9 +27,11 @@ const App = () => {
         <Link to="/">Root</Link>
         <Link to="/detail/123">123</Link>
         <Link to="/detail/456">456</Link>
-        <Suspense fallback={<Backdrop open={true}/>}>
+        <Link to="/detail/789">789</Link>
+        <Suspense fallback={<Backdrop open={true} />}>
           <Switch>
             <Route path="/detail/:id" component={Detail} />
+            <Route path="/not-found" component={DeadLink} />
           </Switch>
         </Suspense>
       </header>
