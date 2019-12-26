@@ -1,3 +1,4 @@
+import { Backdrop } from "@material-ui/core";
 import React, { Suspense } from "react";
 import { Link, Route, Switch } from "react-router-dom";
 import "./App.css";
@@ -25,7 +26,7 @@ const App = () => {
         <Link to="/">Root</Link>
         <Link to="/detail/123">123</Link>
         <Link to="/detail/456">456</Link>
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<Backdrop open={true}/>}>
           <Switch>
             <Route path="/detail/:id" component={Detail} />
           </Switch>
