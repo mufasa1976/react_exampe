@@ -1,19 +1,19 @@
-import { configureStore, Store } from "@reduxjs/toolkit";
-import { createEpicMiddleware } from "redux-observable";
-import CombinedEpics from "./epics";
-import RootRecuder from "./reducers";
+import { combineReducers, configureStore, Store } from "@reduxjs/toolkit";
+import { combineEpics, createEpicMiddleware } from "redux-observable";
+import * as Epics from "./epics";
+import * as Reducers from "./reducers";
 
 const epicMiddleware = createEpicMiddleware();
 
 const configureAppStore = (): Store => {
   const store = configureStore({
-    reducer: RootRecuder,
+    reducer: combineReducers({State: Reducers.ReducedState}),
     middleware: [epicMiddleware],
     devTools: {
       name: "My first React App"
     }
   });
-  epicMiddleware.run(CombinedEpics);
+  epicMiddleware.run(combineEpics(Epics.FirstEpic, Epics.SecondEpic));
   return store;
 };
 

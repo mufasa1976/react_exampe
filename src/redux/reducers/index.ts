@@ -1,8 +1,4 @@
-import {
-  combineReducers,
-  createReducer,
-  PayloadAction
-} from "@reduxjs/toolkit";
+import { createReducer, PayloadAction } from "@reduxjs/toolkit";
 import { ActionTypes } from "../actions";
 
 export interface State {
@@ -17,7 +13,7 @@ const initialState: State = {
   value3: undefined
 };
 
-const ReducedState = createReducer(initialState, {
+export const ReducedState = createReducer(initialState, {
   [ActionTypes.FIRST]: (state, action: PayloadAction<boolean>) => ({
     ...state,
     value1: "First Value",
@@ -30,5 +26,3 @@ const ReducedState = createReducer(initialState, {
   }),
   [ActionTypes.THIRD]: state => ({ ...state, value1: "Third Value" })
 });
-
-export default combineReducers({ State: ReducedState });

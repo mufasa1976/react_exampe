@@ -1,19 +1,25 @@
 import { PayloadAction } from "@reduxjs/toolkit";
-import { ActionsObservable, combineEpics } from "redux-observable";
-import { filter, map, mapTo } from "rxjs/operators";
+import { ActionsObservable } from "redux-observable";
+import { ajax, AjaxError } from "rxjs/ajax";
+import { catchError, filter, map, mapTo, mergeMap, tap } from "rxjs/operators";
 import { ActionTypes, secondAction, thirdAction } from "../actions";
 
-const FirstEpic = (action$: ActionsObservable<PayloadAction<boolean>>) =>
+export const FirstEpic = (action$: ActionsObservable<PayloadAction<boolean>>) =>
   action$.pipe(
     filter(action => action.type === ActionTypes.FIRST),
     map(action => action.payload),
-    map((payload: boolean) => secondAction(0))
+    mergeMap(payload =>
+      ajax({ url: `api/version`, responseType: "text" }).pipe(
+        tap(response => console.log(response)),
+        tap(response => console.log(response.response)),
+        map(() => secondAction(0)),
+        catchError((error: AjaxError) => ActionsObservable.of(thirdAction()))
+      )
+    )
   );
 
-const SecondEpic = (action$: ActionsObservable<PayloadAction<number>>) =>
+export const SecondEpic = (action$: ActionsObservable<PayloadAction<number>>) =>
   action$.pipe(
     filter(action => action.type === ActionTypes.SECOND),
     mapTo(thirdAction())
   );
-
-export default combineEpics(FirstEpic, SecondEpic);

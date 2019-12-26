@@ -27,9 +27,7 @@ const App = () => {
         <Link to="/detail/456">456</Link>
         <Suspense fallback={<div>Loading...</div>}>
           <Switch>
-            <Route path="/detail/:id">
-              <Detail />
-            </Route>
+            <Route path="/detail/:id" component={Detail} />
           </Switch>
         </Suspense>
       </header>
