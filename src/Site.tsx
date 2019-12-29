@@ -10,7 +10,7 @@ import { connect, useDispatch } from "react-redux";
 import { ajax } from "rxjs/ajax";
 import { take } from "rxjs/operators";
 import { State as ReduxState } from "./redux";
-import { firstAction, openDialogAction } from "./redux/actions";
+import { firstAction, showDialogAction } from "./redux/actions";
 
 interface ExportProps {
   counter?: number;
@@ -21,6 +21,12 @@ interface Props {
   openDialog: () => void;
   closeDialog: () => void;
 }
+
+const initialProps: Props = {
+  dialog: false,
+  openDialog: () => {},
+  closeDialog: () => {}
+};
 
 interface State {
   requestInProgress: boolean;
@@ -83,6 +89,7 @@ const Site = (props: Props & ExportProps) => {
   });
   const dispatch = useDispatch();
   useEffect(() => {
+    console.log("Effect called");
     if (!state.randomUser && !state.requestInProgress) {
       console.log("Getting randomuser data");
       dispatch(firstAction(true));
@@ -136,14 +143,13 @@ const mapStateToProps = (
   { reduxState }: ReduxState,
   props: ExportProps
 ): Props => ({
-  dialog: reduxState.openDialog,
-  openDialog: () => {},
-  closeDialog: () => {}
+  ...initialProps,
+  dialog: reduxState.openDialog
 });
 
 const mapDispatchToProps = {
-  openDialog: () => openDialogAction(true),
-  closeDialog: () => openDialogAction(false)
+  openDialog: () => showDialogAction(true),
+  closeDialog: () => showDialogAction(false)
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Site);

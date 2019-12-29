@@ -27,7 +27,7 @@ export const ReducedState = createReducer(initialState, {
     value3: action.payload
   }),
   [ActionTypes.THIRD]: state => ({ ...state, value1: "Third Value" }),
-  [ActionTypes.OPEN_DIALOG]: (state, action: PayloadAction<boolean>) => ({
+  [ActionTypes.SHOW_DIALOG]: (state, action: PayloadAction<boolean>) => ({
     ...state,
     openDialog: action.payload
   })
