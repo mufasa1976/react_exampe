@@ -12,10 +12,14 @@ import { take } from "rxjs/operators";
 import { State as ReduxState } from "./redux";
 import { firstAction, openDialogAction } from "./redux/actions";
 
-export interface Props {
+interface ExportProps {
+  counter?: number;
+}
+
+interface Props {
   dialog: boolean;
-  openDialog?: () => void;
-  closeDialog?: () => void;
+  openDialog: () => void;
+  closeDialog: () => void;
 }
 
 interface State {
@@ -70,7 +74,7 @@ interface RandomUser {
   };
 }
 
-const Site = (props: Props) => {
+const Site = (props: Props & ExportProps) => {
   const [state, setState] = useState<State>({
     requestInProgress: false,
     randomUser: undefined,
@@ -111,6 +115,7 @@ const Site = (props: Props) => {
 
   return (
     <div>
+      <h1>Counter: {props.counter || 456}</h1>
       <h2>{state.value1}</h2>
       <Button color="primary" onClick={props.openDialog}>
         click me !!!
@@ -127,8 +132,13 @@ const Site = (props: Props) => {
   );
 };
 
-const mapStateToProps = ({ reduxState }: ReduxState): Props => ({
-  dialog: reduxState.openDialog
+const mapStateToProps = (
+  { reduxState }: ReduxState,
+  props: ExportProps
+): Props => ({
+  dialog: reduxState.openDialog,
+  openDialog: () => {},
+  closeDialog: () => {}
 });
 
 const mapDispatchToProps = {
