@@ -23,7 +23,7 @@ const App = () => {
         >
           Learn React
         </a>
-        <Site query="Some Query" counter={456} />
+        <Site />
         <Link to="/">Root</Link>
         <Link to="/detail/123">123</Link>
         <Link to="/detail/456">456</Link>

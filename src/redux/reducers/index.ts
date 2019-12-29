@@ -5,12 +5,14 @@ export interface State {
   value1: string;
   value2: boolean | undefined;
   value3: number | undefined;
+  openDialog: boolean;
 }
 
 const initialState: State = {
   value1: "Hello World",
   value2: undefined,
-  value3: undefined
+  value3: undefined,
+  openDialog: false
 };
 
 export const ReducedState = createReducer(initialState, {
@@ -24,5 +26,9 @@ export const ReducedState = createReducer(initialState, {
     value1: "Second Value",
     value3: action.payload
   }),
-  [ActionTypes.THIRD]: state => ({ ...state, value1: "Third Value" })
+  [ActionTypes.THIRD]: state => ({ ...state, value1: "Third Value" }),
+  [ActionTypes.OPEN_DIALOG]: (state, action: PayloadAction<boolean>) => ({
+    ...state,
+    openDialog: action.payload
+  })
 });

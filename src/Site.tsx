@@ -1,17 +1,18 @@
 import { Button, Dialog, DialogTitle, TextField } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { ajax } from "rxjs/ajax";
 import { take } from "rxjs/operators";
-import { firstAction } from "./redux/actions";
+import { State as ReduxState } from "./redux";
+import { firstAction, openDialogAction } from "./redux/actions";
 
-interface Props {
-  query: string;
-  counter?: number;
+export interface Props {
+  dialog?: boolean;
+  openDialog?: () => void;
+  closeDialog?: () => void;
 }
 
 interface State {
-  openDialog: boolean;
   requestInProgress: boolean;
   randomUser: RandomUser | undefined;
   value1: string;
@@ -63,10 +64,8 @@ interface RandomUser {
   };
 }
 
-const Site = ({ counter = 123, ...props }: Props) => {
-  console.log(props);
+const Site = ({ dialog = false, openDialog, closeDialog }: Props) => {
   const [state, setState] = useState<State>({
-    openDialog: false,
     requestInProgress: false,
     randomUser: undefined,
     value1: "Default Value 1",
@@ -94,14 +93,6 @@ const Site = ({ counter = 123, ...props }: Props) => {
     }
   }, [state.randomUser, state.requestInProgress, dispatch]);
 
-  const openDialog = () => {
-    setState(state => ({ ...state, openDialog: true }));
-  };
-
-  const closeDialog = () => {
-    setState(state => ({ ...state, openDialog: false }));
-  };
-
   const changeValue1 = (event: any) => {
     const value = event.target.value;
     setState(state => ({ ...state, value1: value }));
@@ -114,7 +105,6 @@ const Site = ({ counter = 123, ...props }: Props) => {
 
   return (
     <div>
-      <h1>Hello World, {counter}</h1>
       <h2>{state.value1}</h2>
       <Button color="primary" onClick={openDialog}>
         click me !!!
@@ -122,11 +112,20 @@ const Site = ({ counter = 123, ...props }: Props) => {
       <TextField label="Value 1" value={state.value1} onChange={changeValue1} />
       <TextField label="Value 2" value={state.value2} onChange={changeValue2} />
       <img src={state.randomUser?.results[0]?.picture.large} alt="some Pic" />
-      <Dialog open={state.openDialog} onClose={closeDialog}>
+      <Dialog open={dialog} onClose={closeDialog}>
         <DialogTitle>Hello Dialog</DialogTitle>
       </Dialog>
     </div>
   );
 };
 
-export default Site;
+const mapStateToProps = ({ reduxState }: ReduxState): Props => ({
+  dialog: reduxState.openDialog
+});
+
+const mapDispatchToProps = {
+  openDialog: () => openDialogAction(true),
+  closeDialog: () => openDialogAction(false)
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Site);
