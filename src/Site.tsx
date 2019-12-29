@@ -1,4 +1,10 @@
-import { Button, Dialog, DialogTitle, TextField } from "@material-ui/core";
+import {
+  Avatar,
+  Button,
+  Dialog,
+  DialogTitle,
+  TextField
+} from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
 import { ajax } from "rxjs/ajax";
@@ -7,7 +13,7 @@ import { State as ReduxState } from "./redux";
 import { firstAction, openDialogAction } from "./redux/actions";
 
 export interface Props {
-  dialog?: boolean;
+  dialog: boolean;
   openDialog?: () => void;
   closeDialog?: () => void;
 }
@@ -64,7 +70,7 @@ interface RandomUser {
   };
 }
 
-const Site = ({ dialog = false, openDialog, closeDialog }: Props) => {
+const Site = (props: Props) => {
   const [state, setState] = useState<State>({
     requestInProgress: false,
     randomUser: undefined,
@@ -106,13 +112,15 @@ const Site = ({ dialog = false, openDialog, closeDialog }: Props) => {
   return (
     <div>
       <h2>{state.value1}</h2>
-      <Button color="primary" onClick={openDialog}>
+      <Button color="primary" onClick={props.openDialog}>
         click me !!!
       </Button>
       <TextField label="Value 1" value={state.value1} onChange={changeValue1} />
       <TextField label="Value 2" value={state.value2} onChange={changeValue2} />
-      <img src={state.randomUser?.results[0]?.picture.large} alt="some Pic" />
-      <Dialog open={dialog} onClose={closeDialog}>
+      <Avatar src={state.randomUser?.results[0]?.picture.thumbnail}>
+        some Pic
+      </Avatar>
+      <Dialog open={props.dialog} onClose={props.closeDialog}>
         <DialogTitle>Hello Dialog</DialogTitle>
       </Dialog>
     </div>
